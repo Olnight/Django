@@ -1,0 +1,15 @@
+pip install virtualenv
+pip install virtualenvwrapper-win
+pip install Django
+django-admin startproject 
+python manage.py startapp
+python manage.py runserver
+python manage.py createsuperuser 
+python manage.py validate
+
+В будущем, когда мы создаем или изменяем существующую модель необходимо обновлять Django в два этапа.
+1.		Сначала мы создаем файл миграции с помощью команды makemigrations, которая генерирует команды SQL для предустановленных приложений в нашем параметре INSTALLED_APPS. Файлы миграции не выполняют эти команды в файле базы данных, а являются ссылкой на все новые изменения в наших моделях. Этот подход означает, что у нас есть запись изменений в наших моделях.
+2.		Во-вторых, мы создаем фактическую базу данных с помощью migrate, которая выполняет инструкции в нашем файле migrations.
+
+python manage.py makemigrations 
+python manage.py migrate 
