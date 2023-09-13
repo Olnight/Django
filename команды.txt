@@ -7,9 +7,54 @@ python manage.py runserver
 python manage.py createsuperuser 
 python manage.py validate
 
-В будущем, когда мы создаем или изменяем существующую модель необходимо обновлять Django в два этапа.
-1.		Сначала мы создаем файл миграции с помощью команды makemigrations, которая генерирует команды SQL для предустановленных приложений в нашем параметре INSTALLED_APPS. Файлы миграции не выполняют эти команды в файле базы данных, а являются ссылкой на все новые изменения в наших моделях. Этот подход означает, что у нас есть запись изменений в наших моделях.
-2.		Во-вторых, мы создаем фактическую базу данных с помощью migrate, которая выполняет инструкции в нашем файле migrations.
+Р’ Р±СѓРґСѓС‰РµРј, РєРѕРіРґР° РјС‹ СЃРѕР·РґР°РµРј РёР»Рё РёР·РјРµРЅСЏРµРј СЃСѓС‰РµСЃС‚РІСѓСЋС‰СѓСЋ РјРѕРґРµР»СЊ РЅРµРѕР±С…РѕРґРёРјРѕ РѕР±РЅРѕРІР»СЏС‚СЊ Django РІ РґРІР° СЌС‚Р°РїР°.
+1.		РЎРЅР°С‡Р°Р»Р° РјС‹ СЃРѕР·РґР°РµРј С„Р°Р№Р» РјРёРіСЂР°С†РёРё СЃ РїРѕРјРѕС‰СЊСЋ РєРѕРјР°РЅРґС‹ makemigrations, РєРѕС‚РѕСЂР°СЏ РіРµРЅРµСЂРёСЂСѓРµС‚ РєРѕРјР°РЅРґС‹ SQL РґР»СЏ РїСЂРµРґСѓСЃС‚Р°РЅРѕРІР»РµРЅРЅС‹С… РїСЂРёР»РѕР¶РµРЅРёР№ РІ РЅР°С€РµРј РїР°СЂР°РјРµС‚СЂРµ INSTALLED_APPS. Р¤Р°Р№Р»С‹ РјРёРіСЂР°С†РёРё РЅРµ РІС‹РїРѕР»РЅСЏСЋС‚ СЌС‚Рё РєРѕРјР°РЅРґС‹ РІ С„Р°Р№Р»Рµ Р±Р°Р·С‹ РґР°РЅРЅС‹С…, Р° СЏРІР»СЏСЋС‚СЃСЏ СЃСЃС‹Р»РєРѕР№ РЅР° РІСЃРµ РЅРѕРІС‹Рµ РёР·РјРµРЅРµРЅРёСЏ РІ РЅР°С€РёС… РјРѕРґРµР»СЏС…. Р­С‚РѕС‚ РїРѕРґС…РѕРґ РѕР·РЅР°С‡Р°РµС‚, С‡С‚Рѕ Сѓ РЅР°СЃ РµСЃС‚СЊ Р·Р°РїРёСЃСЊ РёР·РјРµРЅРµРЅРёР№ РІ РЅР°С€РёС… РјРѕРґРµР»СЏС….
+2.		Р’Рѕ-РІС‚РѕСЂС‹С…, РјС‹ СЃРѕР·РґР°РµРј С„Р°РєС‚РёС‡РµСЃРєСѓСЋ Р±Р°Р·Сѓ РґР°РЅРЅС‹С… СЃ РїРѕРјРѕС‰СЊСЋ migrate, РєРѕС‚РѕСЂР°СЏ РІС‹РїРѕР»РЅСЏРµС‚ РёРЅСЃС‚СЂСѓРєС†РёРё РІ РЅР°С€РµРј С„Р°Р№Р»Рµ migrations.
 
 python manage.py makemigrations 
 python manage.py migrate 
+-- Creating the "Category" table
+CREATE TABLE Category (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Creating the "Lot" table
+CREATE TABLE Lot (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    creation_date DATETIME NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    image VARCHAR(255),
+    starting_price DECIMAL(10, 2) NOT NULL,
+    end_date DATETIME NOT NULL,
+    bidding_step DECIMAL(10, 2) NOT NULL,
+    author_id INT NOT NULL,
+    winner_id INT,
+    category_id INT NOT NULL,
+    FOREIGN KEY (author_id) REFERENCES User(id),
+    FOREIGN KEY (winner_id) REFERENCES User(id),
+    FOREIGN KEY (category_id) REFERENCES Category(id)
+);
+
+-- Creating the "Bid" table
+CREATE TABLE Bid (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    date DATETIME NOT NULL,
+    amount DECIMAL(10, 2) NOT NULL,
+    user_id INT NOT NULL,
+    lot_id INT NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES User(id),
+    FOREIGN KEY (lot_id) REFERENCES Lot(id)
+);
+
+-- Creating the "User" table
+CREATE TABLE User (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    registration_date DATETIME NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    contacts TEXT
+);
