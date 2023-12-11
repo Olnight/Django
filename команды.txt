@@ -6,6 +6,7 @@ python manage.py startapp
 python manage.py runserver
 python manage.py createsuperuser 
 python manage.py validate
+python manage.py loaddata C:\KursDjango\CarDealerWeb-Django\project_dump.json
 
 В будущем, когда мы создаем или изменяем существующую модель необходимо обновлять Django в два этапа.
 1.		Сначала мы создаем файл миграции с помощью команды makemigrations, которая генерирует команды SQL для предустановленных приложений в нашем параметре INSTALLED_APPS. Файлы миграции не выполняют эти команды в файле базы данных, а являются ссылкой на все новые изменения в наших моделях. Этот подход означает, что у нас есть запись изменений в наших моделях.
